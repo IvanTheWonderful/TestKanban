@@ -17,6 +17,9 @@ interface KanbanProps {
 
 const Kanban = (props: KanbanProps) => {
   const { board, setBoard } = props;
+  const [cardsBeingMoved, setCardsBeingMoved] = useState<
+    Array<string | number>
+  >([]);
 
   const [disableCardDrag, setDisableCardDrag] = useState<boolean>(false);
 
@@ -25,6 +28,7 @@ const Kanban = (props: KanbanProps) => {
     source,
     destination
   ) => {
+    setCardsBeingMoved([...cardsBeingMoved, _card.id]);
     setBoard((currentBoard) => {
       return moveCard(currentBoard, source, destination);
     });
@@ -50,6 +54,8 @@ const Kanban = (props: KanbanProps) => {
       setBoard((currentBoard) => {
         return moveCard(currentBoard, newSource, newDestination);
       });
+    } else {
+      setCardsBeingMoved(cardsBeingMoved.filter((id) => id !== _card.id));
     }
   };
 
@@ -71,7 +77,12 @@ const Kanban = (props: KanbanProps) => {
         disableCardDrag={disableCardDrag}
         disableColumnDrag
         allowRenameColumn={false}
-        renderCard={(card: CardObject) => <CustomCard card={card} />}
+        renderCard={(card: CardObject) => (
+          <CustomCard
+            card={card}
+            isMoving={cardsBeingMoved.includes(card.id)}
+          />
+        )}
       >
         {board}
       </ControlledBoard>
