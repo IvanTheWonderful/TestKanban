@@ -54,9 +54,8 @@ const Kanban = (props: KanbanProps) => {
       setBoard((currentBoard) => {
         return moveCard(currentBoard, newSource, newDestination);
       });
-    } else {
-      setCardsBeingMoved(cardsBeingMoved.filter((id) => id !== _card.id));
     }
+    setCardsBeingMoved(cardsBeingMoved.filter((id) => id !== _card.id));
   };
 
   return (
